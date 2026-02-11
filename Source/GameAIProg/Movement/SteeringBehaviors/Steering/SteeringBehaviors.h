@@ -29,8 +29,12 @@ protected:
 
 class Seek : public ISteeringBehavior
 {
-	//Seek() = default;
-	//virtual ~Seek();
+public:
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+};
+
+class Flee : public ISteeringBehavior
+{
 public:
 	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 };
