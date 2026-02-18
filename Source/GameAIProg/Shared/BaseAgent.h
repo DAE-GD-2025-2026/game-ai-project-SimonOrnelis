@@ -42,6 +42,8 @@ public:
 	
 	float GetMaxLinearSpeed() const { return GetCharacterMovement()->GetMaxSpeed(); }
 	void SetMaxLinearSpeed(float MaxSpeed) { GetCharacterMovement()->MaxWalkSpeed = MaxSpeed; }
+	
+	float GetOriginalMaxLinearSpeed() const { return OriginalMaxLinearSpeed; }
 
 	FVector2D GetLinearVelocity() const { return FVector2D{GetCharacterMovement()->Velocity}; }
 
@@ -58,4 +60,8 @@ public:
 
 	bool GetDebugRenderingEnabled() const { return bIsDebugRenderingEnabled; }
 	void SetDebugRenderingEnabled(bool IsEnabled) { this->bIsDebugRenderingEnabled = IsEnabled; }
+
+private:
+	// Need to change this is temperary
+	float OriginalMaxLinearSpeed{600};;
 };
