@@ -115,3 +115,8 @@ SteeringOutput Wander::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 	 
 	return Seek::CalculateSteering(DeltaT, Agent);
 }
+
+SteeringOutput Pursuit::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
+{
+	return Seek::CalculateSteering(DeltaT, Agent);
+}
