@@ -95,9 +95,10 @@ SteeringOutput Wander::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 	// Generate random angle
 	float Angle = FMath::RandRange(0.0f, 2.0f * PI);
 	float Radius = 100.f;
+	float offsetDistance = 120.f;
 	FVector Center{
-		Agent.GetPosition().X + Agent.GetLinearVelocity().X * 0.250f,
-		Agent.GetPosition().Y + Agent.GetLinearVelocity().Y * 0.250f,
+		Agent.GetPosition().X + offsetDistance * Agent.GetActorForwardVector().X,
+		Agent.GetPosition().Y + offsetDistance * Agent.GetActorForwardVector().Y,
 		0.f
 	};
 	
@@ -118,5 +119,45 @@ SteeringOutput Wander::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 
 SteeringOutput Pursuit::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
 {
+	auto direction = Target.Position - Agent.GetPosition();
+	float distance = direction.Size();
+	
+	float speed = Target.LinearVelocity.Size();
+	float prediction;
+	if (speed <= (distance / 50.f))
+		prediction = 50.f;
+	else
+		prediction = distance / speed;
+	auto predictedTarget = Target.Position + Target.LinearVelocity * prediction;
+	
+	FVector TargetPos{predictedTarget.X,predictedTarget.Y,0.f};
+	
+	if (Agent.GetDebugRenderingEnabled())
+	{
+		DrawDebugCircle(Agent.GetWorld(),TargetPos,5,8,FColor::Red,false,0.f,0,5.f,FVector::RightVector,FVector::ForwardVector,false);
+	}
+	Target.Position = predictedTarget;
+	return Seek::CalculateSteering(DeltaT, Agent);
+}
+
+SteeringOutput Evade::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
+{
+	auto direction = Target.Position - Agent.GetPosition();
+	float distance = direction.Size();
+	float speed = Target.LinearVelocity.Size();
+	float prediction;
+	if (speed <= (distance / 50.f))
+		prediction = 50.f;
+	else
+		prediction = distance / speed;
+	auto predictedTarget = Target.Position + Target.LinearVelocity * prediction;
+	Target.Position = predictedTarget;
+
+	return Flee::CalculateSteering(DeltaT, Agent);
+}
+
+SteeringOutput Blended::CalculateSteering(float DeltaT, ASteeringAgent& Agent)
+{
+	
 	return Seek::CalculateSteering(DeltaT, Agent);
 }
