@@ -43,6 +43,15 @@ class Arrive : public ISteeringBehavior
 {
 public:
 	virtual  SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
+	void SetTargetRadius(float radius);
+private:
+	float m_TargetRadius{};
+};
+
+class Face : public Seek
+{
+public:
+	virtual SteeringOutput CalculateSteering(float DeltaT, ASteeringAgent& Agent) override;
 };
 
 class Wander : public Seek

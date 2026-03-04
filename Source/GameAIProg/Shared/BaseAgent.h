@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BaseAgent.generated.h"
@@ -38,13 +39,12 @@ public:
 	
 	// BaseAgent Interface
 	FVector2D GetPosition() const { return FVector2D{GetActorLocation().X, GetActorLocation().Y}; }
+	void SetPosition(FVector2D const & NewPosition) { SetActorLocation(FVector{NewPosition, GetActorLocation().Z}); }
 	float GetRotation() const { return GetActorRotation().Yaw; }
 	
 	float GetMaxLinearSpeed() const { return GetCharacterMovement()->GetMaxSpeed(); }
 	void SetMaxLinearSpeed(float MaxSpeed) { GetCharacterMovement()->MaxWalkSpeed = MaxSpeed; }
-	
 	float GetOriginalMaxLinearSpeed() const { return OriginalMaxLinearSpeed; }
-
 	FVector2D GetLinearVelocity() const { return FVector2D{GetCharacterMovement()->Velocity}; }
 
 	float GetMaxAngularSpeed() const { return GetCharacterMovement()->RotationRate.Yaw; }
@@ -60,7 +60,8 @@ public:
 
 	bool GetDebugRenderingEnabled() const { return bIsDebugRenderingEnabled; }
 	void SetDebugRenderingEnabled(bool IsEnabled) { this->bIsDebugRenderingEnabled = IsEnabled; }
-
+	
+	float GetCapsuleRadius() const { return GetCapsuleComponent()->GetScaledCapsuleRadius(); }
 private:
 	// Need to change this is temperary
 	float OriginalMaxLinearSpeed{600};;
