@@ -53,6 +53,12 @@ private:
 	GameAI::GraphRenderer* Renderer{nullptr};
 	GameAI::TerrainNodeFactory* NodeFactory{nullptr};
 	
+	bool bDrawGrid{false};
+	bool bDrawConnections{false};
+	bool bDrawNodeNumbers{false};
+	bool bDrawTerrain{false};
+	bool bDrawConnectionsCosts{false};
+	
 	int PathStartNodeId{44};
 	int PathEndNodeId{88};
 	int SelectedHeuristic = 4;

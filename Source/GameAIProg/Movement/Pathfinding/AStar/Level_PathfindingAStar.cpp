@@ -3,6 +3,7 @@
 
 #include "Level_PathfindingAStar.h"
 
+#include "PhysicsAssetRenderUtils.h"
 #include "GraphTheory/Algorithms/AStar.h"
 #include "GraphTheory/Algorithms/BFS.h"
 #include "GraphTheory/Algorithms/Heuristics.h"
@@ -91,10 +92,34 @@ void ALevel_PathfindingAStar::Tick(float DeltaTime)
 	
 	UpdateImGui();
 	
-	Renderer->RenderGraph(*TerrainGraph);
-	TerrainGraph->DebugDrawCells(GetWorld());
-	TerrainGraph->DrawTerrain(GetWorld());
-	// TODO implement conditional debug draws
+	// TODO implement conditional debug draws 2/5
+	if (bDrawGrid)
+	{
+		//Draw grid
+		TerrainGraph->DebugDrawCells(GetWorld());
+	}
+	if (bDrawGrid)
+	{
+		//Draw terrain water/mud
+		TerrainGraph->DrawTerrain(GetWorld());//Does nothing CHECK
+	}
+	if (bDrawNodeNumbers)
+	{
+		//TODO
+		//Renderer->RenderNodeIds(*TerrainGraph);
+	}
+	if (bDrawConnections)
+	{
+		//TODO
+		//Renderer->RenderConnections(*TerrainGraph);
+	}
+	if (bDrawConnectionsCosts)
+	{
+		//TODO
+		//Renderer->RenderConnectionWeights(*TerrainGraph);
+	}
+	//TODO
+	Renderer->RenderGraph(*TerrainGraph);//red and green point
 }
 
 void ALevel_PathfindingAStar::CalculatePath()
@@ -106,8 +131,8 @@ void ALevel_PathfindingAStar::CalculatePath()
 		&& PathStartNodeId != PathEndNodeId)
 	{
 		//Select (uncomment) BFS Pathfinding or A* Pathfinding
-		BFS pathfinder = BFS(TerrainGraph);
-		// AStar pathfinder = AStar(TerrainGraph, HeuristicFunction);
+		// BFS pathfinder = BFS(TerrainGraph);
+		AStar pathfinder = AStar(TerrainGraph, HeuristicFunction);
 		TerrainNode* const startNode = TerrainGraph->GetNodeAs<TerrainNode>(PathStartNodeId);
 		TerrainNode* const endNode = TerrainGraph->GetNodeAs<TerrainNode>(PathEndNodeId);
 
@@ -186,11 +211,11 @@ void ALevel_PathfindingAStar::UpdateImGui()
 		ImGui::Text("A* Pathfinding");
 		ImGui::Spacing();
 		
-		// TODO conditional debug draws
-		// ImGui::Checkbox("Grid", &bDrawGrid);
-		// ImGui::Checkbox("NodeNumbers", &bDrawNodeNumbers);
-		// ImGui::Checkbox("Connections", &bDrawConnections);
-		// ImGui::Checkbox("Connections Costs", &bDrawConnectionsCosts);
+		ImGui::Checkbox("Grid", &bDrawGrid);
+		ImGui::Checkbox("Terrain", &bDrawTerrain);//Does nothing CHECK
+		ImGui::Checkbox("NodeNumbers", &bDrawNodeNumbers);
+		ImGui::Checkbox("Connections", &bDrawConnections);
+		ImGui::Checkbox("Connections Costs", &bDrawConnectionsCosts);
 		if (ImGui::Combo("", &SelectedHeuristic, "Manhattan\0Euclidean\0SqEuclidean\0Octile\0Chebyshev", 4))
 		{
 			switch (SelectedHeuristic)
