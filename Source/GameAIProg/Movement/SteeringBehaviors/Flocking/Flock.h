@@ -62,6 +62,7 @@ private:
 	int NrOfNeighbors{0};
 
 	ASteeringAgent* pAgentToEvade{nullptr};
+	TArray<ASteeringAgent*> pNeighbors{};
 	
 	//Steering Behaviors
 	//std::unique_ptr<Separation> pSeparationBehavior{};
