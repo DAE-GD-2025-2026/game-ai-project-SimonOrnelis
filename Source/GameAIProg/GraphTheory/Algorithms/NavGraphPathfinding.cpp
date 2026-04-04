@@ -15,6 +15,7 @@ std::vector<FVector2D> NavMeshPathfinding::FindPath(const FVector2D& startPos, c
 	std::vector<FVector2D> finalPath{};
 
 	//Get the start and endTriangle
+	auto startTriangle = pNavGraph->GetNavPolygon();
 
 	//We have valid start/end triangles and they are not the same
 	//=> Start looking for a path
